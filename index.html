@@ -37,6 +37,8 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            width: 80%;
+            max-width: 300px;
         }
         .hidden {
             display: none;
@@ -56,7 +58,7 @@
         <h2>看不清可点击图片切换</h2>
         <img id="codeImg" onclick="showCode()" alt="校验码图" style="max-width: 100%;">
         <input type="text" id="inputCode" placeholder="请输入验证码" style="width: 80%; max-width: 300px;">
-        <button onclick="validateCode()">确定</button>
+        <button onclick="validateCode()" style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; width: 80%; max-width: 300px;">确定</button>
     </div>
 
     <script>
