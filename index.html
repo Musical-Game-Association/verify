@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mugassn音游社—身份识别</title>
+    <title>Mugassn音游社—验证页</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,7 +49,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="title">Mugassn音游社—身份验证</div>
+        <div class="title">Mugassn音游社—身份识别</div>
         <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" onclick="openVerificationPopup()" onkeydown="checkEnter(event)">
         <input type="password" class="password-input hidden" id="password" placeholder="请输入识别码" oninput="checkPassword()">
         <button class="submit-button hidden" onclick="verifyPassword()">提交</button>
