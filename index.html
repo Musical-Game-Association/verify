@@ -10,7 +10,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 80vh;
+            height: 100vh;
             margin: 0;
             background-color: #f7f7f7;
         }
@@ -21,42 +21,51 @@
             font-size: 2em;
             margin-bottom: 20px;
         }
-        .password-input {
-            margin-bottom: 20px;
-        }
-        @media (max-width: 600px) {
-            .title {
-                font-size: 1.5em;
-            }
-        }
         canvas {
             width: 100%;
-            height: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
-
-        #codeImg {
-            cursor: pointer;
-            vertical-align: top;
-        }
-
-        #reset {
-            cursor: pointer;
+        .password-input {
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="title">Mugassn音游社—身份验证</div>
-    <img id="codeImg" class="code" onclick="showCode()" alt="校验码图" />
-    <span id="reset" onclick="showCode()">看不清换一张</span>
-    <input type="text" id="inputCode" placeholder="请输入验证码" style="margin-top: 10px;">
-    <button onclick="validateCode()">确定</button>
-    <hr>
-    <input type="password" class="password-input" id="password" placeholder="请输入密码">
-    <button onclick="verify()">提交</button>
+    <button onclick="openModal()">点击验证</button>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>人机验证</h2>
+            <img id="codeImg" class="code" onclick="showCode()" alt="校验码图" />
+            <input type="text" id="inputCode" placeholder="请输入验证码" style="margin-top: 10px;">
+            <button onclick="validateCode()">确定</button>
+            <canvas id="captchaCanvas"></canvas>
+        </div>
+    </div>
+    <input type="password" class="password-input" id="password" placeholder="请输入密码" style="display: none;">
+    <button onclick="verifyAndRedirect()" style="display: none;">提交</button>
 </div>
 
 <script>
+    var modal = document.getElementById("myModal");
+
+    function openModal() {
+        modal.style.display = "block";
+        showCode();
+    }
+
+    function closeModal() {
+        modal.style.display = "none";
+        document.getElementById("password").style.display = "block";
+        document.querySelector("button[type='submit']").style.display = "block";
+    }
+
     // 页面加载完成时，生成随机验证码
     window.onload = function() {
         showCode();
@@ -81,6 +90,8 @@
         let text = window.sessionStorage.getItem("text").toUpperCase();
         if (inputCode === text) {
             alert("验证码正确");
+            window.sessionStorage.setItem("textValidated", "true");
+            closeModal(); // Close modal on successful validation
         } else {
             alert("验证码错误，请重新输入！");
             showCode(); // Refresh code on incorrect entry
@@ -97,7 +108,7 @@
         ];
         let text = "";
 
-        let canvas = document.createElement("canvas");
+        let canvas = document.getElementById("captchaCanvas");
         canvas.width = 98;
         canvas.height = 45;
         let context = canvas.getContext("2d");
@@ -153,10 +164,15 @@
         }
     }
 
-    function verify() {
-        var password = document.getElementById('password').value;
+    function verifyAndRedirect() {
+        let password = document.getElementById('password').value;
         if (password === '0220') {
-            window.location.href = 'https://score.mugassn.com';
+            // Redirect only if CAPTCHA validated
+            if (window.sessionStorage.getItem("textValidated") === "true") {
+                window.location.href = 'https://score.mugassn.com';
+            } else {
+                alert("请先验证验证码！");
+            }
         } else {
             alert('未查询到存在该验证码，请核实！');
         }
