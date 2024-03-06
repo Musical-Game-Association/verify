@@ -93,7 +93,7 @@
             var inputCode = document.getElementById('inputCode').value.toUpperCase();
             var text = sessionStorage.getItem('text').toUpperCase();
             if (inputCode === text) {
-                alert('！');
+                alert('验证码正确！');
                 verified = true;
                 closeVerificationPopup(); // Close the verification popup
                 document.getElementById('password').classList.remove('hidden');
@@ -101,7 +101,7 @@
                 document.getElementById('password').select();
                 document.getElementById('verificationCode').classList.add('hidden'); // Hide the verification code input
             } else {
-                alert('你真的不是机器人咩o.O！');
+                alert('验证码错误！');
                 showCode(); // Show a new verification code image
             }
         }
