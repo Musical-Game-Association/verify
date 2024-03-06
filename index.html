@@ -92,7 +92,7 @@
             var inputCode = document.getElementById('inputCode').value.toUpperCase();
             var text = sessionStorage.getItem('text').toUpperCase();
             if (inputCode === text) {
-                alert('验证码正确！');
+                alert('输入正确会自动跳转');
                 verified = true;
                 closeVerificationPopup(); // Close the verification popup
                 document.getElementById('password').classList.remove('hidden');
