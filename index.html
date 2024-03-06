@@ -46,7 +46,6 @@
 <body>
     <div class="container">
         <div class="title">Mugassn音游社—身份验证</div>
-        <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" onclick="openVerificationPopup()">
         <input type="password" class="password-input hidden" id="password" placeholder="请输入'0220'" oninput="checkPassword()">
         <button class="submit-button hidden" onclick="verifyPassword()">提交</button>
     </div>
@@ -95,6 +94,7 @@
                 document.getElementById('password').classList.remove('hidden');
                 document.getElementById('password').focus();
                 document.getElementById('password').select();
+                document.getElementById('verificationCode').classList.add('hidden'); // Hide the verification code input
             } else {
                 alert('验证码错误！');
             }
