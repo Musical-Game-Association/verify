@@ -81,10 +81,9 @@
         function verifyPassword() {
             var password = document.getElementById('password').value;
             if (password === '0220') {
-                alert('验证码正确！');
                 window.location.href = 'https://score.mugassn.com';
             } else {
-                alert('验证码错误！');
+                alert('未查询存在该验证码！');
             }
         }
 
@@ -101,7 +100,7 @@
                 document.getElementById('password').select();
                 document.getElementById('verificationCode').classList.add('hidden'); // Hide the verification code input
             } else {
-                alert('验证码错误！');
+                alert('你尊嘟不是机器人咩？！o.O');
                 showCode(); // Show a new verification code image
             }
         }
