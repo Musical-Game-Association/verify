@@ -1,3 +1,5 @@
+ChatGPT 3.5
+User
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -50,8 +52,9 @@
 <body>
     <div class="container">
         <div class="title">Mugassn音游社—身份验证</div>
-        <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" oninput="checkVerificationCode()">
+        <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" onclick="openVerificationPopup()" onkeydown="checkEnter(event)">
         <input type="password" class="password-input hidden" id="password" placeholder="请输入'0220'" oninput="checkPassword()">
+        <button class="submit-button hidden" onclick="verifyPassword()">提交</button>
     </div>
 
     <!-- Verification Popup -->
@@ -59,6 +62,7 @@
         <h2>人机验证码</h2>
         <img id="codeImg" onclick="showCode()" alt="校验码图">
         <input type="text" id="inputCode" placeholder="请输入验证码">
+        <button onclick="validateCode()">确定</button>
     </div>
 
     <script>
@@ -86,14 +90,6 @@
             }
         }
 
-        // Function to check the verification code
-        function checkVerificationCode() {
-            var codeInput = document.getElementById('verificationCode').value;
-            if (codeInput.length === 4) {
-                openVerificationPopup();
-            }
-        }
-
         // Function to validate the verification code
         function validateCode() {
             var inputCode = document.getElementById('inputCode').value.toUpperCase();
@@ -109,6 +105,13 @@
             } else {
                 alert('验证码错误！');
                 showCode(); // Show a new verification code image
+            }
+        }
+
+        // Function to check if Enter key is pressed
+        function checkEnter(event) {
+            if (event.key === 'Enter') {
+                validateCode();
             }
         }
 
