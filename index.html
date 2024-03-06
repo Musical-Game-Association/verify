@@ -37,20 +37,27 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            width: 80%;
-            max-width: 300px;
+            width: 40%;
+            max-width: 200px;
         }
         .hidden {
             display: none;
+        }
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="title">Mugassn音游社—身份识别</div>
-        <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" onclick="openVerificationPopup()" onkeydown="checkEnter(event)">
+        <div class="input-container">
+            <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" onclick="openVerificationPopup()" onkeydown="checkEnter(event)">
+            <button class="submit-button hidden" onclick="verifyPassword()">提交</button>
+        </div>
         <input type="password" class="password-input hidden" id="password" placeholder="请输入识别码" oninput="checkPassword()">
-        <button class="submit-button hidden" onclick="verifyPassword()">提交</button>
     </div>
 
     <!-- Verification Popup -->
