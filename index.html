@@ -46,8 +46,7 @@
 <body>
     <div class="container">
         <div class="title">Mugassn音游社—身份验证</div>
-        <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" oninput="checkVerification()">
-        <input type="password" class="password-input hidden" id="password" placeholder="请输入'0220'">
+        <input type="password" class="password-input" id="password" placeholder="请输入'0220'" oninput="checkPassword()">
         <button class="submit-button hidden" onclick="verifyPassword()">提交</button>
     </div>
 
@@ -91,21 +90,12 @@
             if (inputCode === text) {
                 alert('验证码正确！');
                 verified = true;
-                document.getElementById('verificationPopup').classList.add('hidden');
+                closeVerificationPopup(); // Close the verification popup
                 document.getElementById('password').classList.remove('hidden');
                 document.getElementById('password').focus();
                 document.getElementById('password').select();
-                document.getElementById('password').addEventListener('input', checkPassword);
             } else {
                 alert('验证码错误！');
-            }
-        }
-
-        // Function to check the verification code
-        function checkVerification() {
-            var verificationCode = document.getElementById('verificationCode').value;
-            if (verificationCode.length === 4) {
-                openVerificationPopup();
             }
         }
 
