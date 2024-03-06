@@ -1,3 +1,4 @@
+User
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -37,28 +38,17 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            width: 40%;
-            max-width: 200px;
             width: 80%;
             max-width: 300px;
         }
         .hidden {
             display: none;
         }
-        .input-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="title">Mugassn音游社—身份识别</div>
-        <div class="input-container">
-            <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" onclick="openVerificationPopup()" onkeydown="checkEnter(event)">
-            <button class="submit-button hidden" onclick="verifyPassword()">提交</button>
-        </div>
         <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" onclick="openVerificationPopup()" onkeydown="checkEnter(event)">
         <input type="password" class="password-input hidden" id="password" placeholder="请输入识别码" oninput="checkPassword()">
         <button class="submit-button hidden" onclick="verifyPassword()">提交</button>
@@ -71,17 +61,21 @@
         <input type="text" id="inputCode" placeholder="请输入验证码" style="width: 80%; max-width: 300px;">
         <button onclick="validateCode()" style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; width: 80%; max-width: 300px;">确定</button>
     </div>
+
     <script>
         var verified = false;
+
         // Function to open the verification popup
         function openVerificationPopup() {
             document.getElementById('verificationPopup').classList.remove('hidden');
             showCode(); // Generate and display the verification code
         }
+
         // Function to close the verification popup
         function closeVerificationPopup() {
             document.getElementById('verificationPopup').classList.add('hidden');
         }
+
         // Function to verify the password
         function verifyPassword() {
             var password = document.getElementById('password').value;
@@ -91,6 +85,7 @@
                 alert('未查询存在该识别码，请核实！');
             }
         }
+
         // Function to validate the verification code
         function validateCode() {
             var inputCode = document.getElementById('inputCode').value.toUpperCase();
@@ -108,12 +103,14 @@
                 showCode(); // Show a new verification code image
             }
         }
+
         // Function to check if Enter key is pressed
         function checkEnter(event) {
             if (event.key === 'Enter') {
                 validateCode();
             }
         }
+
         // Function to check the password
         function checkPassword() {
             var password = document.getElementById('password').value;
@@ -121,6 +118,7 @@
                 verifyPassword();
             }
         }
+
         // Function to generate and display the verification code
         function showCode() {
             var image = document.getElementById('codeImg');
@@ -128,6 +126,7 @@
             image.src = obj.base64;
             sessionStorage.setItem('text', obj.text);
         }
+
         // Function to generate the verification code
         function drawCode() {
             var nums = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
@@ -168,6 +167,7 @@
                 text: text
             };
         }
+
         // Function to draw random lines
         function drawline(canvas, context) {
             context.moveTo(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height));
@@ -176,6 +176,7 @@
             context.strokeStyle = 'rgba(50,50,50,0.3)';
             context.stroke();
         }
+
         // Function to draw random dots
         function drawDot(canvas, context) {
             var px = Math.floor(Math.random() * canvas.width),
@@ -185,6 +186,7 @@
             context.lineWidth = 0.1;
             context.stroke();
         }
+
         // Function to convert canvas to image
         function convertCanvasToImage(canvas) {
             try {
