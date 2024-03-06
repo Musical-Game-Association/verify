@@ -1,5 +1,3 @@
-ChatGPT 3.5
-User
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -51,15 +49,15 @@ User
 </head>
 <body>
     <div class="container">
-        <div class="title">Mugassn音游社—身份验证</div>
-        <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" onclick="openVerificationPopup()" onkeydown="checkEnter(event)">
-        <input type="password" class="password-input hidden" id="password" placeholder="请输入'0220'" oninput="checkPassword()">
+        <div class="title">Mugassn音游社—身份识别</div>
+        <input type="text" class="verification-input" id="verificationCode" placeholder="请输入识别码" onclick="openVerificationPopup()" onkeydown="checkEnter(event)">
+        <input type="password" class="password-input hidden" id="password" placeholder="请输入验证码" oninput="checkPassword()">
         <button class="submit-button hidden" onclick="verifyPassword()">提交</button>
     </div>
 
     <!-- Verification Popup -->
     <div id="verificationPopup" class="hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-        <h2>人机验证码</h2>
+        <h2>看不清可点击图片切换</h2>
         <img id="codeImg" onclick="showCode()" alt="校验码图">
         <input type="text" id="inputCode" placeholder="请输入验证码">
         <button onclick="validateCode()">确定</button>
