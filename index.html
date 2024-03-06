@@ -29,23 +29,138 @@
                 font-size: 1.5em;
             }
         }
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        #codeImg {
+            cursor: pointer;
+            vertical-align: top;
+        }
+
+        #reset {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="title">Mugassn音游社—身份验证</div>
-        <input type="password" class="password-input" id="password" placeholder="请输入验证码">
-        <button onclick="verifyPassword()">提交</button>
-    </div>
-    <script>
-        function verifyPassword() {
-            var password = document.getElementById('password').value;
-            if(password === '0220') {
-                window.location.href = 'https://score.mugassn.com';
-            } else {
-                alert('未查询到存在该验证码，请核实！');
-            }
+<div class="container">
+    <div class="title">Mugassn音游社—身份验证</div>
+    <img id="codeImg" class="code" onclick="showCode()" alt="校验码图" />
+    <span id="reset" onclick="showCode()">看不清换一张</span>
+    <input type="text" id="inputCode" placeholder="请输入验证码" style="margin-top: 10px;">
+    <button onclick="validateCode()">确定</button>
+    <hr>
+    <input type="password" class="password-input" id="password" placeholder="请输入密码">
+    <button onclick="verify()">提交</button>
+</div>
+
+<script>
+    // 页面加载完成时，生成随机验证码
+    window.onload = function() {
+        showCode();
+    };
+
+    // 窗口大小调整时，重新生成校验码
+    window.onresize = function() {
+        showCode();
+    };
+
+    // 展示验证码：将验证码赋值到dom的image上
+    function showCode() {
+        let image = document.getElementById("codeImg");
+        let obj = drawCode();
+        image.src = obj.base64;
+        window.sessionStorage.setItem("text", obj.text);
+    }
+
+    // 校验验证码的正确性
+    function validateCode() {
+        let inputCode = document.getElementById("inputCode").value.toUpperCase();
+        let text = window.sessionStorage.getItem("text").toUpperCase();
+        if (inputCode === text) {
+            alert("验证码正确");
+        } else {
+            alert("验证码错误，请重新输入！");
+            showCode(); // Refresh code on incorrect entry
         }
-    </script>
+    }
+
+    // 绘制验证码
+    function drawCode() {
+        let nums = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
+            "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
+            "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+            "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+            "n", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+        ];
+        let text = "";
+
+        let canvas = document.createElement("canvas");
+        canvas.width = 98;
+        canvas.height = 45;
+        let context = canvas.getContext("2d");
+        context.fillStyle = "#00BEFD";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = "white";
+        context.font = "25px Microsoft YaHei";
+        let rand = [], x = [], y = [];
+        for (let i = 0; i < 4; i++) {
+            rand.push(rand[i]);
+            rand[i] = nums[Math.floor(Math.random() * nums.length)];
+            x[i] = i * 20 + 10;
+            y[i] = Math.random() * 20 + 20;
+            context.fillText(rand[i], x[i], y[i]);
+        }
+
+        for (let i = 0; i < 2; i++) {
+            drawline(canvas, context);
+        }
+
+        for (let i = 0; i < 20; i++) {
+            drawDot(canvas, context);
+        }
+
+        let base64 = convertCanvasToImage(canvas);
+
+        text = rand.join("").toUpperCase();
+        return { base64: base64, text: text };
+    }
+
+    function drawline(canvas, context) {
+        context.moveTo(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height));
+        context.lineTo(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height));
+        context.lineWidth = 0.5;
+        context.strokeStyle = "rgba(50,50,50,0.3)";
+        context.stroke();
+    }
+
+    function drawDot(canvas, context) {
+        let px = Math.floor(Math.random() * canvas.width),
+            py = Math.floor(Math.random() * canvas.height);
+        context.moveTo(px, py);
+        context.lineTo(px + 1, py + 1);
+        context.lineWidth = 0.1;
+        context.stroke();
+    }
+
+    function convertCanvasToImage(canvas) {
+        try {
+            return canvas.toDataURL("image/png");
+        } catch (e) {
+            console.error("该浏览器版本不支持：canvas.toDataURL(\"image/png\")");
+        }
+    }
+
+    function verify() {
+        var password = document.getElementById('password').value;
+        if (password === '0220') {
+            window.location.href = 'https://score.mugassn.com';
+        } else {
+            alert('未查询到存在该验证码，请核实！');
+        }
+    }
+</script>
 </body>
 </html>
