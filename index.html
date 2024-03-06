@@ -50,7 +50,7 @@
 <body>
     <div class="container">
         <div class="title">Mugassn音游社—身份验证</div>
-        <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" onkeydown="checkEnter(event)">
+        <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" oninput="checkVerificationCode()">
         <input type="password" class="password-input hidden" id="password" placeholder="请输入'0220'" oninput="checkPassword()">
     </div>
 
@@ -86,6 +86,14 @@
             }
         }
 
+        // Function to check the verification code
+        function checkVerificationCode() {
+            var codeInput = document.getElementById('verificationCode').value;
+            if (codeInput.length === 4) {
+                openVerificationPopup();
+            }
+        }
+
         // Function to validate the verification code
         function validateCode() {
             var inputCode = document.getElementById('inputCode').value.toUpperCase();
@@ -101,13 +109,6 @@
             } else {
                 alert('验证码错误！');
                 showCode(); // Show a new verification code image
-            }
-        }
-
-        // Function to check if Enter key is pressed
-        function checkEnter(event) {
-            if (event.key === 'Enter') {
-                validateCode();
             }
         }
 
