@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>音游社—身份验证</title>
+    <title>Mugassn音游社—身份验证</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,17 +38,21 @@
             border-radius: 4px;
             cursor: pointer;
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="title">Mugassn音游社—身份验证</div>
-        <input type="password" class="password-input" id="password" placeholder="请输入验证码" onclick="openVerificationPopup()">
-        <button class="submit-button" onclick="verifyPassword()">提交</button>
+        <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" oninput="checkVerification()">
+        <input type="password" class="password-input hidden" id="password" placeholder="请输入'0220'">
+        <button class="submit-button hidden" onclick="verifyPassword()">提交</button>
     </div>
 
     <!-- Verification Popup -->
-    <div id="verificationPopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <div id="verificationPopup" class="hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
         <h2>人机验证码</h2>
         <img id="codeImg" onclick="showCode()" alt="校验码图">
         <input type="text" id="inputCode" placeholder="请输入验证码">
@@ -56,25 +60,27 @@
     </div>
 
     <script>
+        var verified = false;
+
         // Function to open the verification popup
         function openVerificationPopup() {
-            document.getElementById('verificationPopup').style.display = 'block';
+            document.getElementById('verificationPopup').classList.remove('hidden');
             showCode(); // Generate and display the verification code
         }
 
         // Function to close the verification popup
         function closeVerificationPopup() {
-            document.getElementById('verificationPopup').style.display = 'none';
+            document.getElementById('verificationPopup').classList.add('hidden');
         }
 
         // Function to verify the password
         function verifyPassword() {
             var password = document.getElementById('password').value;
-            if(password === '0220') {
-                // Open verification popup
-                openVerificationPopup();
+            if (password === '0220') {
+                alert('验证码正确！');
+                window.location.href = 'https://score.mugassn.com';
             } else {
-                alert('未查询到存在该验证码，请核实！');
+                alert('验证码错误！');
             }
         }
 
@@ -82,12 +88,32 @@
         function validateCode() {
             var inputCode = document.getElementById('inputCode').value.toUpperCase();
             var text = sessionStorage.getItem('text').toUpperCase();
-            if(inputCode === text) {
+            if (inputCode === text) {
                 alert('验证码正确！');
-                closeVerificationPopup(); // Close the verification popup
-                window.location.href = 'https://score.mugassn.com';
+                verified = true;
+                document.getElementById('verificationPopup').classList.add('hidden');
+                document.getElementById('password').classList.remove('hidden');
+                document.getElementById('password').focus();
+                document.getElementById('password').select();
+                document.getElementById('password').addEventListener('input', checkPassword);
             } else {
                 alert('验证码错误！');
+            }
+        }
+
+        // Function to check the verification code
+        function checkVerification() {
+            var verificationCode = document.getElementById('verificationCode').value;
+            if (verificationCode.length === 4) {
+                openVerificationPopup();
+            }
+        }
+
+        // Function to check the password
+        function checkPassword() {
+            var password = document.getElementById('password').value;
+            if (password === '0220' && verified) {
+                verifyPassword();
             }
         }
 
