@@ -9,10 +9,6 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             background-color: #f0f0f0;
         }
         .container {
@@ -21,18 +17,18 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20% auto;
+            max-width: 80%;
         }
         .title {
             font-size: 24px;
             margin-bottom: 20px;
         }
-        .verification-input {
+        .verification-input, .password-input {
             padding: 10px;
             margin-bottom: 20px;
-        }
-        .password-input {
-            padding: 10px;
-            margin-bottom: 20px;
+            width: 80%;
+            max-width: 300px;
         }
         .submit-button {
             padding: 10px 20px;
@@ -58,8 +54,8 @@
     <!-- Verification Popup -->
     <div id="verificationPopup" class="hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
         <h2>看不清可点击图片切换</h2>
-        <img id="codeImg" onclick="showCode()" alt="校验码图">
-        <input type="text" id="inputCode" placeholder="请输入验证码">
+        <img id="codeImg" onclick="showCode()" alt="校验码图" style="max-width: 100%;">
+        <input type="text" id="inputCode" placeholder="请输入验证码" style="width: 80%; max-width: 300px;">
         <button onclick="validateCode()">确定</button>
     </div>
 
