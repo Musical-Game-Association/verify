@@ -51,6 +51,9 @@
         <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" onclick="openVerificationPopup()" onkeydown="checkEnter(event)">
         <input type="password" class="password-input hidden" id="password" placeholder="请输入识别码" oninput="checkPassword()">
         <button class="submit-button hidden" onclick="verifyPassword()">提交</button>
+        <div style="text-align: center; margin-top: 20px;">
+    <p>使用该服务，视您接受并同意<a href="https://kdocs.cn/l/cnEpHEOVyuKG" target="_blank">《免责声明》</a></p>
+</div>
     </div>
 
     <!-- Verification Popup -->
@@ -59,8 +62,6 @@
         <img id="codeImg" onclick="showCode()" alt="校验码图" style="max-width: 100%;">
         <input type="text" id="inputCode" placeholder="请输入验证码" style="width: 80%; max-width: 300px;"><br>
         <button onclick="validateCode()" style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; width: 80%; max-width: 300px;">确定</button>
-        <div style="text-align: center; margin-top: 20px;">
-        <p>使用该服务，视您接受并同意<a href="https://kdocs.cn/l/cnEpHEOVyuKG" target="_blank">《免责声明》</a></p>
 </div>
     </div>
 
