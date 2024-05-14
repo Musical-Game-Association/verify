@@ -49,7 +49,7 @@
     <div class="container">
         <div class="title">Mugassn音游社—身份识别</div>
         <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" onclick="openVerificationPopup()" onkeydown="checkEnter(event)">
-        <input type="password" class="password-input hidden" id="password" placeholder="请输入识别码" oninput="checkPassword()">
+        <input type="password" class="password-input hidden" id="password" placeholder="请输入识别码" onkeydown="checkEnter(event)">
         <button class="submit-button hidden" onclick="verifyPassword()">提交</button>
         <div style="text-align: center; margin-top: 20px;">
             <p>使用该服务，视您接受并同意<a href="https://kdocs.cn/l/cnEpHEOVyuKG" target="_blank">《免责声明》</a></p>
@@ -118,6 +118,7 @@
                 document.getElementById('password').classList.remove('hidden');
                 document.getElementById('password').focus();
                 document.getElementById('password').select();
+                document.querySelector('.submit-button').classList.remove('hidden');
                 document.getElementById('verificationCode').classList.add('hidden'); // Hide the verification code input
             } else {
                 alert('你真的不是一只机器人么？！o.O');
@@ -128,15 +129,11 @@
         // Function to check if Enter key is pressed
         function checkEnter(event) {
             if (event.key === 'Enter') {
-                validateCode();
-            }
-        }
-
-        // Function to check the password
-        function checkPassword() {
-            var password = document.getElementById('password').value;
-            if (password !== '' && verified) {
-                verifyPassword();
+                if (!verified) {
+                    validateCode();
+                } else {
+                    verifyPassword();
+                }
             }
         }
 
