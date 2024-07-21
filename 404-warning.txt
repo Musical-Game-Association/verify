@@ -1,2 +1,2 @@
-0220 https://score.mugassn.com
-preview https://preview.mugassn.com
+0220 https://score.mugassn.us.kg
+preview https://preview.mugassn.us.kg
