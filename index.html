@@ -1,219 +1,347 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mugassn音游社—验证页</title>
+    <title>Mugassn-Verify</title>
     <style>
+        * {
+            box-sizing: border-box;
+            transition: .2s;
+        }
+
+        :root {
+            --bgColor: white;
+            --inputColor: black;
+            --outlineColor: rgb(60, 115, 235);
+            --border: black;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            background: var(--bgColor);
+        }
+
+        .shell {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url(./img/1.png);
+            background-size: cover;
+        }
+
+        body.show-password {
+            --bgColor: rgba(0, 0, 0, 0.9);
+            --inputColor: white;
+            --border: rgb(255, 255, 255);
+        }
+
+        form {
+            transform: translate3d(0, 0, 0);
+            padding: 50px;
+            border: 20px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 10px 10px 10px #00000065;
+        }
+
+        form > * + * {
+            margin-top: 15px;
+        }
+
+        .form-item > * + * {
+            margin-top: 0.5rem;
+        }
+
+        h2, label, input, button {
+            font-size: 2rem;
+            color: var(--inputColor);
+            font-family: '优设标题黑';
+        }
+
+        h2 {
+            font-size: 4rem;
             margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
         }
-        .container {
-            text-align: center;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: 20% auto;
-            max-width: 80%;
-        }
-        .title {
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-        .verification-input, .password-input {
-            padding: 10px;
-            margin-bottom: 20px;
-            width: 80%;
-            max-width: 300px;
-        }
-        .submit-button {
-            padding: 10px 20px;
-            background-color: #000;
-            color: #fff;
+
+        button {
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 80%;
-            max-width: 300px;
         }
-        .hidden {
+
+        #submit {
+            width: 100%;
+            cursor: pointer;
+            margin: 20px 0 0 2px;
+            padding: 0.75rem 1.25rem;
+            color: var(--bgColor);
+            background-color: var(--inputColor);
+            box-shadow: 4px 4px 0 rgba(30, 144, 255, 0.2);
+        }
+
+        #submit:active {
+            transform: translateY(1px);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input {
+            padding: 0.75rem 4rem 0.75rem 0.75rem;
+            width: 100%;
+            border: 2px solid transparent;
+            background-color: transparent;
+            box-shadow: inset 0 0 0 2px black, inset 6px 6px 0 rgba(30, 144, 255, 0.2), 3px 3px 0 rgba(30, 144, 255, 0.2);
+            -webkit-appearance: none;
+        }
+
+        input:focus {
+            outline-offset: 1px;
+        }
+
+        .show-password input {
+            box-shadow: inset 0 0 0 2px black;
+            border: 2px dashed white;
+        }
+
+        .show-password input:focus {
+            outline: none;
+            border-color: rgb(255, 255, 145);
+        }
+
+        #eyeball {
+            --size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            outline: none;
+            position: absolute;
+            top: 50%;
+            right: 0.75rem;
+            border: none;
+            background-color: transparent;
+            transform: translateY(-50%);
+        }
+
+        #eyeball:active {
+            transform: translateY(calc(-50% + 1px));
+        }
+
+        .eye {
+            width: var(--size);
+            height: var(--size);
+            border: 2px solid var(--inputColor);
+            border-radius: calc(var(--size) / 1.5) 0;
+            transform: rotate(45deg);
+        }
+
+        .eye:before,
+        .eye:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            border-radius: 100%;
+        }
+
+        .eye:before {
+            width: 35%;
+            height: 35%;
+            background-color: var(--inputColor);
+        }
+
+        .eye:after {
+            width: 65%;
+            height: 65%;
+            border: 2px solid var(--inputColor);
+            border-radius: 100%;
+        }
+
+        #beam {
+            position: absolute;
+            top: 50%;
+            right: 1.75rem;
+            clip-path: polygon(100% 50%, 100% 50%, 0 0, 0 100%);
+            width: 100vw;
+            height: 25vw;
+            z-index: 1;
+            mix-blend-mode: multiply;
+            transition: transform 200ms ease-out;
+            transform-origin: 100% 50%;
+            transform: translateY(-50%) rotate(var(--beamDegrees, 0));
+            pointer-events: none;
+        }
+
+        .show-password #beam {
+            background: rgb(255, 255, 145);
+        }
+
+        /* 验证码弹窗样式 */
+        #verificationPopup {
             display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        #verificationPopup img {
+            margin-bottom: 10px;
+        }
+
+        /* 调整验证码输入框大小 */
+        #inputCode {
+            width: 150px; /* 调整输入框的宽度 */
+            height: 30px; /* 调整输入框的高度 */
+            font-size: 1rem; /* 设置字体大小 */
+            padding: 5px;
+        }
+
+        /* 调整验证码确定按钮位置 */
+        #verifyCaptcha {
+            margin-top: 15px; /* 向下移动按钮 */
+            padding: 8px 16px; /* 按钮的内边距 */
+            font-size: 1rem; /* 按钮字体大小 */
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #verifyCaptcha:active {
+            transform: translateY(1px); /* 点击时微调 */
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="title">Mugassn音游社—身份识别</div>
-        <input type="text" class="verification-input" id="verificationCode" placeholder="请输入验证码" onclick="openVerificationPopup()" onkeydown="checkEnter(event)">
-        <input type="password" class="password-input hidden" id="password" placeholder="请输入识别码" onkeydown="checkEnter(event)">
-        <button class="submit-button hidden" onclick="verifyPassword()">提交</button>
-        <div style="text-align: center; margin-top: 20px;">
-            <p>谱面预览请输入 preview</a></p>
-            <p>使用该服务，视您接受并同意<a href="https://kdocs.cn/l/cnEpHEOVyuKG" target="_blank">《免责声明》</a></p>
-        </div>
+    <div class="shell">
+        <form>
+            <h2>Mugassn</h2>
+
+            <div class="form-item">
+                <label for="password">ID Code</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" autocomplete="off" autocorrect="off" autocapitalize="off"
+                           spellcheck="false" data-lpignore="true" />
+                    <button type="button" id="eyeball">
+                        <div class="eye"></div>
+                    </button>
+                    <div id="beam"></div>
+                </div>
+            </div>
+            <button id="submit" type="button">verify</button>
+        </form>
     </div>
 
-    <!-- Verification Popup -->
-    <div id="verificationPopup" class="hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-        <h2 style="font-size: 16px;">看不清请点击图片切换</h2>
-        <img id="codeImg" onclick="showCode()" alt="校验码图" style="max-width: 100%;">
-        <input type="text" id="inputCode" placeholder="请输入验证码" style="width: 80%; max-width: 300px;"><br>
-        <button onclick="validateCode()" style="padding: 10px 20px; background-color: #000; color: #fff; border: none; border-radius: 4px; cursor: pointer; width: 80%; max-width: 300px;">确定</button>
+    <!-- 验证码弹窗 -->
+    <div id="verificationPopup">
+        <h3>点击图片可刷新</h3>
+        <img id="codeImg" alt="验证码" />
+        <input type="text" id="inputCode" placeholder="请输入验证码">
+        <button id="verifyCaptcha">Check</button>
     </div>
 
     <script>
-        var verified = false;
-        var passwords = [];
-        var urls = [];
+        const root = document.documentElement; 
+        const eye = document.querySelector('#eyeball'); 
+        const beam = document.querySelector('#beam'); 
+        const passwordInput = document.querySelector('#password'); 
+        const submitButton = document.getElementById('submit');
+        const verificationPopup = document.getElementById('verificationPopup');
+        const codeImg = document.getElementById('codeImg');
+        const inputCode = document.getElementById('inputCode');
+        const verifyCaptchaButton = document.getElementById('verifyCaptcha');
+        let correctUrl = ""; // 用于保存成功的URL
 
-        fetch('404-warning.txt')
-            .then(response => response.text())
-            .then(data => {
-                var lines = data.split('\n');
-                lines.forEach(line => {
-                    var parts = line.split(' ');
-                    passwords.push(parts[0]);
-                    urls.push(parts[1]);
-                });
-            });
+        // 切换密码可见性
+        eye.addEventListener('click', e => {
+            e.preventDefault(); 
+            document.body.classList.toggle('show-password'); 
+            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password'; 
+            passwordInput.focus(); 
+        });
 
-        // Function to open the verification popup
-        function openVerificationPopup() {
-            document.getElementById('verificationPopup').classList.remove('hidden');
-            showCode(); // Generate and display the verification code
-        }
-
-        // Function to close the verification popup
-        function closeVerificationPopup() {
-            document.getElementById('verificationPopup').classList.add('hidden');
-        }
-
-        // Function to verify the password
-        function verifyPassword() {
-            var password = document.getElementById('password').value;
-            if (password.trim() === '') {
+        // 验证密码功能
+        submitButton.addEventListener('click', () => {
+            const password = passwordInput.value.trim();
+            if (!password) {
                 alert('请输入识别码！');
                 return;
             }
 
-            var foundIndex = passwords.indexOf(password);
-            if (foundIndex !== -1) {
-                window.location.href = urls[foundIndex];
-            } else {
-                alert('未查询存在该识别码，请核实！');
-            }
+            // 读取404-warning.txt文件并验证密码
+            fetch('404-warning.txt')
+                .then(response => response.text())
+                .then(data => {
+                    const lines = data.split('\n');
+                    const credentials = lines.map(line => line.split(' '));
+                    const matched = credentials.find(cred => cred[0] === password);
+
+                    if (matched) {
+                        correctUrl = matched[1];
+                        openVerificationPopup(); // 显示验证码弹窗
+                    } else {
+                        alert('未查询存在该识别码，请重试！');
+                    }
+                })
+                .catch(err => {
+                    console.error('文件读取错误:', err);
+                });
+        });
+
+        // 打开验证码弹窗
+        function openVerificationPopup() {
+            generateCaptcha(); // 生成并显示验证码
+            verificationPopup.style.display = 'block'; // 显示弹窗
         }
 
-        // Function to validate the verification code
-        function validateCode() {
-            var inputCode = document.getElementById('inputCode').value.toUpperCase();
-            var text = sessionStorage.getItem('text').toUpperCase();
-            if (inputCode === text) {
-                alert('你已经是一只成熟的人类了！！');
-                verified = true;
-                closeVerificationPopup(); // Close the verification popup
-                document.getElementById('password').classList.remove('hidden');
-                document.getElementById('password').focus();
-                document.getElementById('password').select();
-                document.querySelector('.submit-button').classList.remove('hidden');
-                document.getElementById('verificationCode').classList.add('hidden'); // Hide the verification code input
-            } else {
-                alert('你真的不是一只机器人么？！o.O');
-                showCode(); // Show a new verification code image
-            }
-        }
-
-        // Function to check if Enter key is pressed
-        function checkEnter(event) {
-            if (event.key === 'Enter') {
-                if (!verified) {
-                    validateCode();
-                } else {
-                    verifyPassword();
-                }
-            }
-        }
-
-        // Function to generate and display the verification code
-        function showCode() {
-            var image = document.getElementById('codeImg');
-            var obj = drawCode();
-            image.src = obj.base64;
-            sessionStorage.setItem('text', obj.text);
-        }
-
-        // Function to generate the verification code
-        function drawCode() {
-            var nums = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
-                "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
-                "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
-                "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-                "n", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
-            ];
-            var text = '';
-            var canvas = document.createElement('canvas');
-            var context = canvas.getContext('2d');
+        // 生成验证码
+        function generateCaptcha() {
+            const text = Math.random().toString(36).substring(2, 6).toUpperCase(); // 生成4位随机验证码
+            sessionStorage.setItem('captcha', text); // 保存验证码
+            const canvas = document.createElement('canvas');
             canvas.width = 120;
             canvas.height = 50;
-            context.fillStyle = 'black'; // 修改为黑色背景色
+            const context = canvas.getContext('2d');
+            context.fillStyle = '#000';
             context.fillRect(0, 0, canvas.width, canvas.height);
-            context.fillStyle = 'white';
-            context.font = '25px Microsoft YaHei';
-            var rand = [],
-                x = [],
-                y = [];
-            for (var i = 0; i < 4; i++) {
-                rand.push(rand[i]);
-                rand[i] = nums[Math.floor(Math.random() * nums.length)];
-                x[i] = i * 20 + 10;
-                y[i] = Math.random() * 20 + 20;
-                context.fillText(rand[i], x[i], y[i]);
-            }
-            for (var i = 0; i < 2; i++) {
-                drawline(canvas, context);
-            }
-            for (var i = 0; i < 20; i++) {
-                drawDot(canvas, context);
-            }
-            var base64 = convertCanvasToImage(canvas);
-            text = rand.join('').toUpperCase();
-            return {
-                base64: base64,
-                text: text
-            };
+            context.font = '30px Arial';
+            context.fillStyle = '#fff';
+            context.fillText(text, 10, 35);
+            codeImg.src = canvas.toDataURL(); // 设置验证码图片
         }
 
-        // Function to draw random lines
-        function drawline(canvas, context) {
-            context.moveTo(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height));
-            context.lineTo(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height));
-            context.lineWidth = 0.5;
-            context.strokeStyle = 'rgba(50,50,50,0.3)';
-            context.stroke();
-        }
+        // 刷新验证码
+        codeImg.addEventListener('click', generateCaptcha);
 
-        // Function to draw random dots
-        function drawDot(canvas, context) {
-            var px = Math.floor(Math.random() * canvas.width),
-                py = Math.floor(Math.random() * canvas.height);
-            context.moveTo(px, py);
-            context.lineTo(px + 1, py + 1);
-            context.lineWidth = 0.1;
-            context.stroke();
-        }
+        // 验证验证码
+        verifyCaptchaButton.addEventListener('click', () => {
+            const userInput = inputCode.value.trim().toUpperCase();
+            const storedCaptcha = sessionStorage.getItem('captcha');
 
-        // Function to convert canvas to image
-        function convertCanvasToImage(canvas) {
-            try {
-                return canvas.toDataURL('image/png');
-            } catch (e) {
-                return null;
+            if (userInput === storedCaptcha) {
+                window.location.href = correctUrl; // 验证成功后跳转
+            } else {
+                alert('验证码错误，请重试！');
+                generateCaptcha(); // 重新生成验证码
             }
-        }
+        });
     </script>
 </body>
 </html>
