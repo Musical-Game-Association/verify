@@ -1,2 +1,0 @@
-0220 https://score.mugassn.cloudns.org
-preview https://preview.mugassn.cloudns.org
